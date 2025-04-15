@@ -1,16 +1,19 @@
 from direct.showbase.ShowBase import ShowBase
 from direct.task import Task
 from direct.gui.OnscreenText import OnscreenText
+from direct.gui.DirectGui import DirectButton
 from panda3d.core import WindowProperties, TextNode, loadPrcFileData, Point3
 import sys
 import random
 from datetime import datetime
 import math
+import os
 
 from src.game.track import Track
 from src.game.player import Player
 from src.game.typing_handler import TypingHandler
 from src.game.character_manager import CharacterManager
+from src.game.menu import Menu
 from src.utils.constants import *
 from src.utils.data_manager import DataManager
 
@@ -35,6 +38,10 @@ class LanguageSurfer(ShowBase):
     def __init__(self):
         print("Initializing Language Surfer...")
         ShowBase.__init__(self)
+        
+        # Set up model paths
+        loadPrcFileData("", f"model-path {os.path.join(os.getcwd(), 'models')}")
+        loadPrcFileData("", f"model-path {os.path.join(os.getcwd(), 'models', 'gltf')}")
         
         # Set up window properties
         props = WindowProperties()
@@ -67,6 +74,7 @@ class LanguageSurfer(ShowBase):
         self.game_speed = INITIAL_SPEED
         self.game_over = False
         self.characters_seen = 0
+        self.game_mode = None
         
         # Create game objects
         self.track = Track(self.render, self.loader)
@@ -75,7 +83,7 @@ class LanguageSurfer(ShowBase):
         
         # Create UI elements
         self.score_text = OnscreenText(
-            text="Score: 0",
+            text="",
             pos=(-1.3, 0.9),
             scale=0.07,
             fg=TEXT_COLOR,
@@ -83,7 +91,7 @@ class LanguageSurfer(ShowBase):
         )
         
         self.level_text = OnscreenText(
-            text="Level: 1",
+            text="",
             pos=(-1.3, 0.8),
             scale=0.07,
             fg=TEXT_COLOR,
@@ -91,7 +99,7 @@ class LanguageSurfer(ShowBase):
         )
         
         self.hearts_text = OnscreenText(
-            text=HEART_SYMBOL * self.hearts,
+            text="",
             pos=(-1.3, 0.7),
             scale=0.07,
             fg=HEART_COLOR,
@@ -105,7 +113,49 @@ class LanguageSurfer(ShowBase):
             fg=TEXT_COLOR
         )
         
-        print("UI elements created")
+        # Set up controls
+        self.accept("arrow_left", self.player.move_left)
+        self.accept("arrow_right", self.player.move_right)
+        
+        # Show splash screen
+        self.show_splash()
+        
+    def show_splash(self):
+        # Create splash text
+        self.splash_text = OnscreenText(
+            text="Powered by Panda3D",
+            pos=(0, 0),
+            scale=0.15,
+            fg=TEXT_COLOR,
+            align=TextNode.ACenter
+        )
+        
+        # Add task to show menu after splash
+        self.taskMgr.doMethodLater(2.0, self.show_menu, "show_menu")
+        
+    def show_menu(self, task):
+        # Clean up splash
+        if hasattr(self, 'splash_text'):
+            self.splash_text.destroy()
+        
+        # Create menu
+        self.menu = Menu(self.render, self.loader, self.start_game)
+        
+        return Task.done
+        
+    def start_game(self, mode):
+        self.game_mode = mode
+        self.score = 0
+        self.level = 1
+        self.hearts = MAX_HEARTS
+        self.game_speed = INITIAL_SPEED
+        self.game_over = False
+        self.characters_seen = 0
+        
+        # Update UI
+        self.score_text.setText(f"Score: {self.score}")
+        self.level_text.setText(f"Level: {self.level}")
+        self.hearts_text.setText(HEART_SYMBOL * self.hearts)
         
         # Set up typing handler
         self.typing_handler = TypingHandler(
@@ -120,11 +170,9 @@ class LanguageSurfer(ShowBase):
         # Set up tasks
         self.taskMgr.add(self.update_game, "update_game")
         
-        print("Game initialization complete")
-        
     def start_new_round(self):
         if not self.game_over:
-            self.character_manager.show_new_character()
+            self.character_manager.show_new_character(self.game_mode)
             self.characters_seen += 1
             
     def handle_typing(self, char):
@@ -174,7 +222,7 @@ class LanguageSurfer(ShowBase):
             
         # Update track and player
         self.track.update(self.game_speed)
-        self.player.update_position()  # Update player position every frame
+        self.player.update_position()
         
         # Update character manager
         self.character_manager.update(task.time)

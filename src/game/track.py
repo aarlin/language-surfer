@@ -10,17 +10,30 @@ class Track:
         self.create_track()
         
     def create_track(self):
-        # Create the track base
-        self.track = self.loader.loadModel("models/box")
-        self.track.setScale(TRACK_WIDTH, TRACK_LENGTH, 0.1)
+        # Try to load custom track model, fall back to box if not found
+        try:
+            self.track = self.loader.loadModel("models/track.egg")
+            print("Loaded custom track model")
+        except:
+            print("Custom track model not found, using default box")
+            self.track = self.loader.loadModel("models/box")
+            self.track.setScale(TRACK_WIDTH, TRACK_LENGTH, 0.1)
+            
         self.track.setPos(0, 0, -0.1)
         self.track.setColor(*TRACK_COLOR)
         self.track.reparentTo(self.render)
         
         # Create lane markers
         for i in range(-1, 2):
-            lane = self.loader.loadModel("models/box")
-            lane.setScale(0.1, TRACK_LENGTH, 0.1)
+            # Try to load custom lane marker model
+            try:
+                lane = self.loader.loadModel("models/lane_marker.egg")
+                print("Loaded custom lane marker model")
+            except:
+                print("Custom lane marker model not found, using default box")
+                lane = self.loader.loadModel("models/box")
+                lane.setScale(0.1, TRACK_LENGTH, 0.1)
+                
             lane.setPos(i * LANE_WIDTH, 0, 0)
             lane.setColor(*LANE_MARKER_COLOR)
             lane.reparentTo(self.render)

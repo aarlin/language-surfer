@@ -44,6 +44,20 @@ CHARACTERS = [
     {"char": "目", "meaning": "eye", "lane": 0},
 ]
 
+# Number data (Japanese numbers with meanings)
+NUMBERS = [
+    {"char": "一", "meaning": "one", "lane": 0},
+    {"char": "二", "meaning": "two", "lane": 1},
+    {"char": "三", "meaning": "three", "lane": 2},
+    {"char": "四", "meaning": "four", "lane": 0},
+    {"char": "五", "meaning": "five", "lane": 1},
+    {"char": "六", "meaning": "six", "lane": 2},
+    {"char": "七", "meaning": "seven", "lane": 0},
+    {"char": "八", "meaning": "eight", "lane": 1},
+    {"char": "九", "meaning": "nine", "lane": 2},
+    {"char": "十", "meaning": "ten", "lane": 0},
+]
+
 # Colors
 TRACK_COLOR = (0.2, 0.2, 0.2, 1)
 LANE_MARKER_COLOR = (1, 1, 1, 1)
