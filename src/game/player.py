@@ -1,4 +1,4 @@
-from panda3d.core import NodePath
+from panda3d.core import NodePath, loadPrcFileData
 from src.utils.constants import *
 
 class Player:
@@ -7,14 +7,24 @@ class Player:
         self.loader = loader
         self.model = None
         self.position = 0  # -1: left, 0: center, 1: right
+        
+        # Configure Assimp loader settings
+        loadPrcFileData("", "notify-level-assimp info")
+        loadPrcFileData("", "assimp-join-identical-vertices true")
+        loadPrcFileData("", "assimp-optimize-meshes true")
+        loadPrcFileData("", "assimp-remove-redundant-materials true")
+        
         self.create_player()
         
     def create_player(self):
         # Try to load the chair model
         try:
-            # Load the glTF model
-            self.model = self.loader.loadModel("models/gltf/vergils-chair.glb")
+            # Load the OBJ model using Assimp
+            self.model = self.loader.loadModel("models/obj/vergils-chair.obj")
             print("Loaded chair model")
+            
+            # Fix Assimp's Y-up to Panda3D's Z-up coordinate system
+            self.model.setP(90)
             
             # Scale and position the chair
             self.model.setScale(0.5)  # Adjust scale as needed
