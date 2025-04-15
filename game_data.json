@@ -1,0 +1,70 @@
+{
+  "characters": {
+    "口": {
+      "meaning": "mouth",
+      "correct_lane": 1,
+      "times_seen": 0,
+      "times_correct": 0,
+      "last_seen": null,
+      "next_review": null
+    },
+    "目": {
+      "meaning": "eye",
+      "correct_lane": 0,
+      "times_seen": 0,
+      "times_correct": 0,
+      "last_seen": null,
+      "next_review": null
+    },
+    "月": {
+      "meaning": "moon",
+      "correct_lane": 0,
+      "times_seen": 0,
+      "times_correct": 0,
+      "last_seen": null,
+      "next_review": null
+    },
+    "山": {
+      "meaning": "mountain",
+      "correct_lane": 1,
+      "times_seen": 0,
+      "times_correct": 0,
+      "last_seen": null,
+      "next_review": null
+    },
+    "手": {
+      "meaning": "hand",
+      "correct_lane": 2,
+      "times_seen": 0,
+      "times_correct": 0,
+      "last_seen": null,
+      "next_review": null
+    },
+    "火": {
+      "meaning": "fire",
+      "correct_lane": 0,
+      "times_seen": 0,
+      "times_correct": 0,
+      "last_seen": null,
+      "next_review": null
+    },
+    "水": {
+      "meaning": "water",
+      "correct_lane": 2,
+      "times_seen": 0,
+      "times_correct": 0,
+      "last_seen": null,
+      "next_review": null
+    },
+    "木": {
+      "meaning": "tree",
+      "correct_lane": 1,
+      "times_seen": 0,
+      "times_correct": 0,
+      "last_seen": null,
+      "next_review": null
+    }
+  },
+  "scores": [],
+  "srs_data": {}
+}
